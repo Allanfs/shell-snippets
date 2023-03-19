@@ -1,4 +1,6 @@
 #!/bin/bash
+# fail script when error occurs
+set -e
 
 # Atualiza uma dependencia do go.mod e faz um commit dessa atualização
 # Parametros:
@@ -16,8 +18,8 @@ OUTPUT=`grep $DEP_NAME $tmp`
 
 TO_VERSION=`echo $OUTPUT | grep $DEP_NAME | cut -d "=" -f 2  | cut -d "v" -f 2`
 
-echo ">> Informe o ID da task: "
-read TASK
+TASK=`git rev-parse --abbrev-ref HEAD | grep -oP '(?<=CBR-)\d+'`
+TASK="CBR-${TASK}"
 
 echo "PR da versão ${TO_VERSION}?"
 read PR
@@ -29,8 +31,6 @@ if [[ -n "$PR" ]]; then
     commit_msg=$commit_msg$'\n\n'$PR
 fi
 
-
-git add go.mod
-git add go.sum
+git add go.mod go.sum
 
 git commit -m "$commit_msg"
