@@ -41,3 +41,10 @@ merge_to() {
 
     checkout_back
 }
+
+push() {
+    BRANCH_TO_PUSH=$(generate_branch_name $1)
+
+    echo $BRANCH_TO_PUSH
+    git push -u origin $BRANCH_TO_PUSH
+}
