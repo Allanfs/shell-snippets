@@ -24,11 +24,13 @@ checkout_back() {
 }
 
 get_previous_branch() {
-    cat $TMP_FILE
+    repo=$TMP_FILE `_get_repo_name`
+    cat $repo
 }
 TMP_FILE="/tmp/branching-previous-branch"
 store_previous_branch() {
-    echo $1 > $TMP_FILE
+    repo=$TMP_FILE `_get_repo_name`
+    echo $1 > $repo
 }
 
 # $1 : branch que será integrada (dev, hml, stg)
@@ -47,4 +49,8 @@ push() {
 
     echo $BRANCH_TO_PUSH
     git push -u origin $BRANCH_TO_PUSH
+}
+
+_get_repo_name() {
+    basename `git rev-parse --show-toplevel`
 }
